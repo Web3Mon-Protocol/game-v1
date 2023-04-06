@@ -41,17 +41,6 @@ export const login = async () => {
     window.alert('Owner Verification Fail')
     return
   }
-  document.getElementById('profileImg').src = playerUrl
-  if (wallet.selectedChain === 'NEAR') {
-    document.getElementById('parasUrl').addEventListener('click', (e) => {
-      window
-        .open(
-          `https://paras.id/token/${window.contract.contractId}::${window.tokenId}/${window.tokenId}`,
-          '_blank'
-        )
-        .focus()
-    })
-  }
   startLoadingScreen()
   connect()
 }

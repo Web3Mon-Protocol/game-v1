@@ -2,7 +2,11 @@
 export function playMusic(id) {
     pauseMusic()
     var music = document.getElementById(id)
-    music.play()   
+    // repeat
+    music.loop = true
+    // lower volume
+    music.volume = 0.5
+    music.play()
 }
 
 // pause all music
@@ -13,4 +17,32 @@ function pauseMusic() {
     music.pause()
     var music = document.getElementById('battleMapAudio')
     music.pause()
+}
+
+function muteMusic() {
+    document.getElementById('musicBtn').innerText = '🔇'
+    var music = document.getElementById('villageAudio')
+    music.muted = true
+    var music = document.getElementById('battleAudio')
+    music.muted = true
+    var music = document.getElementById('battleMapAudio')
+    music.muted = true
+}
+
+function unmuteMusic() {
+    document.getElementById('musicBtn').innerText = '🔊'
+    var music = document.getElementById('villageAudio')
+    music.muted = false
+    var music = document.getElementById('battleAudio')
+    music.muted = false
+    var music = document.getElementById('battleMapAudio')
+    music.muted = false
+}
+
+document.getElementById('musicBtn').onclick = () => {
+    if (document.getElementById('musicBtn').innerText === '🔊') {
+        muteMusic()
+    } else {
+        unmuteMusic()
+    }
 }

@@ -94,7 +94,7 @@ export class ChannelHandler {
     this.sendCommitReady()
   }
 
-  chooseAction(action) {
+  chooseAction(action, name) {
     if (this.chose_action) {
       // double click prevent
       return
@@ -121,6 +121,12 @@ export class ChannelHandler {
       random_number: randInt(),
     }
     this.sendCommitAction()
+
+    document.querySelector('#actionContent').innerText = name
+    document.querySelector('#battlePopUpCard').style.display = 'flex'
+    setTimeout(() => {
+      document.querySelector('#battlePopUpCard').style.display = 'none'
+    }, 3000)
   }
 
 

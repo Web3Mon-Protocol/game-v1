@@ -2,7 +2,9 @@ export function showCard(title, content, yes, no) {
     document.getElementById('battleCard').innerHTML = `
     <div class="battle_modal_content">
     <h2>${title}</h2>
+    <div>
     ${content}
+    </div>
     <div>
     <button id="yesBattleBtn" class="nes-btn is-success">YES</button>
     <button id="noBattleBtn" class="nes-btn is-error">NO</button>

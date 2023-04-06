@@ -5,6 +5,7 @@ import { SKILL_INFOS } from '../data/skill'
 import { hashMessage, signMessage, randInt } from './utils'
 import { Skill } from './skills'
 import { closeCard, showCard } from '../web/battleCard'
+import { fillBanner } from './battleScene'
 
 export class ChainHandler {
   battle_id
@@ -31,7 +32,7 @@ export class ChainHandler {
       stage: 'commit',
       send_at: send_at,
       selectedSequence: last_sequence + 1,
-      action: { action_index: [-1, -1, -1, -1, -1], random_number: [randInt(), randInt(), randInt(), randInt(), randInt()] },
+      action: { index: [-1, -1, -1, -1, -1], random_number: [randInt(), randInt(), randInt(), randInt(), randInt()] },
       player_skills: player_skills_array,
       last_sequence: last_sequence,
       last_attacker_index: last_attacker_index,
@@ -85,19 +86,27 @@ export class ChainHandler {
 
   setUpActionBox(last_sequence) {
     var div = document.getElementById('action_box_container')
+    div.innerHTML = ''
 
     for (var i = 0; i < 5; i++) {
       var actionBox = document.createElement('div')
       actionBox.className = 'one_action_box'
-      actionBox.value = last_sequence + i + 1
-      actionBox.id = `chosen-${actionBox.value}`
+      actionBox.setAttribute('sequence', last_sequence + i + 1)
+      actionBox.id = `chosen-${last_sequence + i + 1}`
       actionBox.onclick = (e) => {
-        this.selectedSequence = e.currentTarget.value
+        var sequence = e.currentTarget.getAttribute('sequence')
 
-        if (this.action.action_index[e.currentTarget.value] !== -1) {
-          console.log('remove actionBox')
-          this.action.action_index[e.currentTarget.value] = -1
-          document.getElementById(`chosen-${e.currentTarget.value}`).innerHTML = ''
+        // 기존 선택된 것이 있으면 취소
+        document.getElementById(`chosen-${this.selectedSequence}`).style.outline = '3px solid rgba(242, 242, 242, 0.5)'
+
+        // 새로 선택된 것은 표시
+        document.getElementById(`chosen-${sequence}`).style.outline = '3px solid rgba(0, 0, 255, 0.5)'
+
+        this.selectedSequence = sequence
+
+        if (this.action.index[sequence - this.last_sequence - 1] !== -1) {
+          this.action.index[sequence - this.last_sequence - 1] = -1
+          document.getElementById(`chosen-${sequence}`).innerHTML = ''
         }
       }
       div.append(actionBox)
@@ -116,8 +125,6 @@ export class ChainHandler {
   }
 
   chooseAction(action) {
-    console.log(this.player_skills)
-    console.log(action)
     var skill = this.player_skills[action]
     if (
       !skill.check_availability(
@@ -131,7 +138,7 @@ export class ChainHandler {
       return
     }
 
-    this.action.action_index[this.selectedSequence] = parseInt(action)
+    this.action.index[this.selectedSequence - this.last_sequence - 1] = parseInt(action)
 
     var skillType = this.player_skills[action].type
     document.getElementById(
@@ -141,6 +148,7 @@ export class ChainHandler {
 
   handle(current_time) {
     var time_left = this.send_at - current_time
+    fillBanner(undefined, this.selectedSequence, time_left)
     if (time_left < 0) {
       if (this.stage === 'commit') {
         this.stage = 'reveal'
@@ -160,7 +168,7 @@ export class ChainHandler {
 
     var message = {
       hashed_message: hashed_message,
-      sequence: this.last_sequence + 1,
+      sequence: this.last_sequence,
     }
     var signingKey = this.keyManager._signingKey()
     var signature = signMessage(signingKey, JSON.stringify(message))
@@ -175,23 +183,30 @@ export class ChainHandler {
           commit: hashed_message,
           sig: signature,
         },
+      }).then((res) => {
+        console.log(res)
+        var div = document.getElementById('action_box_container')
+        div.innerHTML = `<h2>Wait for another 60 seconds to see result.</h2>`
+
       })
     }
     showCard('Send Commit Tx', '<p>Send Commit Tx To Chain</p>', yes)
   }
 
   async sendReveal() {
-    window.alert('send reveal to chain')
-
-    await wallet.callMethod({
-      contractId: accounts.BATTLE_CONTRACT,
-      method: 'reveal',
-      args: {
-        battle_id: this.battle_id,
-        player_index: this.my_index,
-        actions: this.action,
-      },
-      deposit: 1,
-    })
+    var yes = async () => {
+      closeCard()
+      await wallet.callMethod({
+        contractId: accounts.BATTLE_CONTRACT,
+        method: 'reveal',
+        args: {
+          battle_id: this.battle_id,
+          reveal: this.action,
+          player_index: this.my_index,
+        },
+        deposit: 1,
+      })
+    }
+    showCard('Send Reveal Tx', '<p>Send Reveal Tx To Chain</p>', yes)
   }
 }

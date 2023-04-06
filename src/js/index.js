@@ -61,8 +61,7 @@ function initalSetting() {
 // make other charaters or objects.
 var resume_data = sessionStorage.getItem('resume-data')
 if (resume_data !== null) {
-  document.getElementById('resume-background').style.display = 'block'
-  document.getElementById('resumePopUp').style.display = 'block'
+  document.getElementById('resume-background').style.display = 'flex'
   document.getElementById('resumeButton').addEventListener('click', (e) => {
     resume_data = JSON.parse(resume_data)
     setNFTInfo(resume_data.collection, resume_data.tokenId)

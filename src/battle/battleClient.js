@@ -187,7 +187,6 @@ class BattleClient {
     this.timerId = setInterval(() => this.timer(), 1000)
     this.playing = true
     document.getElementById('battle_banner').style.display = 'block'
-    document.getElementById('atk_or_def').innerText = 'CHOOSE'
     document.querySelector(
       '#battle_sequence'
     ).innerText = `Round: ${this.channelHandler.battle_state.sequence}`
@@ -255,9 +254,9 @@ class BattleClient {
     }
   }
 
-  chooseAction(action) {
+  chooseAction(action, name) {
     if (this.mode === 'channel') {
-      this.channelHandler.chooseAction(action)
+      this.channelHandler.chooseAction(action, name)
     } else if (this.mode === 'chain') {
       this.chainHandler.chooseAction(action)
     }
@@ -300,12 +299,13 @@ class BattleClient {
       case 'wait-finalize':
         document.getElementById('atk_or_def').innerText = 'Finalizing...'
         if (current_time > this.get_result_at) {
-          this.get_result_at += 20
+          this.get_result_at += 1020
           wallet.viewMethod({
             contractId: accounts.BATTLE_CONTRACT,
             method: 'get_result',
             args: { battle_id: this.battle_id },
           }).then((res) => {
+            this.get_result_at -= 1000
             switch (res) {
               case 'Player0Lose':
                 if (this.my_index === 0) {
