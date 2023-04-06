@@ -41,18 +41,20 @@ export function clickEvent() {
 export function setUpBattleCard(type, key, battle_id) {
   var title
   var text
+  var opponent = users[key]
   if (type === 'request') {
     title = 'Request Battle...'
-    text = `Request To: ${users[key].name}`
+    text = `Request To: ${opponent.name}`
   } else if (type === 'accept') {
     title = 'Incoming Battle...'
-    text = `Request From: ${users[key].name}`
+    text = `Request From: ${opponent.name}`
   }
   var content = `
     <div style="margin:5px">
-    <img src=${users[key].nftUrl}/>
+    <img src=${opponent.nftUrl}/>
     </div>
     <p>${text}</p>
+    <button id="parasConnectBtn" class="nes-btn is-primary">see on paras</button>
   `
 
   var yes = (e) => {
@@ -74,4 +76,10 @@ export function setUpBattleCard(type, key, battle_id) {
     document.getElementById('battleCard').innerHTML = ''
   }
   showCard(title, content, yes, no)
+
+  var parasURL = `https://paras.id/token/${opponent.nftCollection}::${opponent.tokenId}/${opponent.tokenId}`
+
+  document.getElementById('parasConnectBtn').addEventListener('click', () => {
+    window.open(parasURL, '_blank').focus()
+  })
 }

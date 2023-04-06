@@ -20,5 +20,3 @@ export class PopUp {
 }
 
 const guidancePopUp = new PopUp('guidance')
-const profilePopUp = new PopUp('profile')
-const historyPopUp = new PopUp('battleHistory')

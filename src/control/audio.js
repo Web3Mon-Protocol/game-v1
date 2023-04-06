@@ -4,6 +4,8 @@ export function playMusic(id) {
     var music = document.getElementById(id)
     // repeat
     music.loop = true
+    // lower volume
+    music.volume = 0.5
     music.play()
 }
 
