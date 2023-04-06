@@ -6,7 +6,7 @@ const nftCropOffsets = {
   'asac.near': { x: -2, y: -21, w: 180, h: 180 }, //ok
   'tinkerunion_nft.enleap.near': { x: 13, y: -7, w: 160, h: 160 }, //ok
   'v0.apemetaerror.near': { x: 5, y: -29, w: 180, h: 170 }, //ok
-  'cartelgen1.neartopia.near': { x: 30, y: 0, w: 115, h: 115 },
+  'cartelgen1.neartopia.near': { x: 20, y: -35, w: 150, h: 150 }, //ok
   'realbirds.near': { x: 21, y: -60, w: 160, h: 150 }, //ok
   'mrbrownproject.near': { x: 0, y: -80, w: 200, h: 250 }, //ok
   'rocketbois.neartopia.near': { x: 5, y: -57, w: 170, h: 170 }, //ok

@@ -215,7 +215,6 @@ canvas {
   max-height: 80%;
   overflow-y: auto;
   text-align: center;
-  font-family: "Segoe UI", sans-serif;
   font-size: 1.5em;
   color: #4bc4ff;
   box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
@@ -593,7 +592,7 @@ img {
   border-radius: 5px;
   padding: 10px 15px;
   position: relative;
-  box-shadow: 4px 4px 3px 3px purple;
+  box-shadow: 4px 4px 3px 3px #7F80E8;
   z-index: 1;
   overflow: hidden;
   transition: all 0.5s ease-in-out;
@@ -609,22 +608,11 @@ img {
 }
 
 .custom_button_1:hover {
-  color: white;
+  color: purple;
 }
 
 .custom_button_1:hover > span.bg {
   transition: all 0.3s ease-in-out;
-}
-
-/* left */
-.custom_button_1 > .bg {
-  left: 0;
-  bottom: 0;
-  transform: translateX(-100%);
-}
-
-.custom_button_1:hover > .bg {
-  transform: translateX(0);
 }
 
 .option {
