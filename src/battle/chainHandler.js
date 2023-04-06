@@ -32,7 +32,7 @@ export class ChainHandler {
       stage: 'commit',
       send_at: send_at,
       selectedSequence: last_sequence + 1,
-      action: { index: [-1, -1, -1, -1, -1], random_number: [randInt(), randInt(), randInt(), randInt(), randInt()] },
+      action: { index: [-1, -1, -1, -1, -1], rand_num: [randInt(), randInt(), randInt(), randInt(), randInt()] },
       player_skills: player_skills_array,
       last_sequence: last_sequence,
       last_attacker_index: last_attacker_index,
