@@ -22,24 +22,11 @@
   }
 }
 
-.battleCard {
-  color: rgba(242, 242, 242, 0.93);
-  width: 400px;
-  margin: auto;
-  text-align: center;
-  left: calc(50% - 200px);
-  z-index: 9;
-  display: none;
-}
-
 #multipleActionCard {
   display: none;
-  flex-direction: column;
-  box-shadow: var(--card-shadow);
-  text-align: center;
-  font-family: Pretendard;
-  left: 10px;
-  z-index: 5;
+  z-index: 2;
+  height: auto;
+  padding-top: 100px;
 
   .action_box {
     display: flex;

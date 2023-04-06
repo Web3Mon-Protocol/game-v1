@@ -60,7 +60,12 @@ export function renderState(battleState, actions, my_index) {
 }
 
 export function fillBanner(is_my_attack, sequence, pick_time_left) {
-  if (is_my_attack)
+  if (is_my_attack === undefined) {
+    document.querySelector('#atk_or_def').innerText = 'PICK SKILL'
+  }
+  else if (sequence === 0)
+    document.querySelector('#atk_or_def').innerText = 'PICK SKILL'
+  else if (is_my_attack)
     document.querySelector('#atk_or_def').innerText = 'ATTACK'
   else document.querySelector('#atk_or_def').innerText = 'DEFENSE'
 
@@ -74,11 +79,6 @@ export function fillBanner(is_my_attack, sequence, pick_time_left) {
  * @param {'win' | 'lose'} result 이겼으면 win, 졌으면 lose
  */
 export function endBattle(result, bet_amount) {
-  if (result === 'WIN') {
-    console.log('이겼다.')
-  } else if (result === 'LOSE') {
-    console.log('졌다.')
-  }
   removeBattleSkillBox()
   adjustMapPosition()
 

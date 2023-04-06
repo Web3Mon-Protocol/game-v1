@@ -118,13 +118,7 @@ export const addBattleSkillBox = (battleState, my_index) => {
       tooltip.style.display = 'none'
     }
     skillBox.onclick = (e) => {
-      // 스킬 사용
-      battle.chooseAction(e.currentTarget.getAttribute('value'))
-      document.querySelector('#actionContent').innerText = SKILL_INFOS[e.currentTarget.getAttribute('skill_type')].name
-      document.querySelector('#battlePopUpCard').style.display = 'flex'
-      setTimeout(() => {
-        document.querySelector('#battlePopUpCard').style.display = 'none'
-      }, 3000)
+      battle.chooseAction(e.currentTarget.getAttribute('value'), SKILL_INFOS[e.currentTarget.getAttribute('skill_type')].name)
     }
 
     attackSkills.push(skillBox)
@@ -149,13 +143,7 @@ export const addBattleSkillBox = (battleState, my_index) => {
       tooltip.style.display = 'none'
     }
     skillBox.onclick = (e) => {
-      // 스킬 사용
-      battle.chooseAction(e.currentTarget.getAttribute('value'))
-      document.querySelector('#actionContent').innerText = SKILL_INFOS[e.currentTarget.getAttribute('skill_type')].name
-      document.querySelector('#battlePopUpCard').style.display = 'flex'
-      setTimeout(() => {
-        document.querySelector('#battlePopUpCard').style.display = 'none'
-      }, 3000)
+      battle.chooseAction(e.currentTarget.getAttribute('value'), SKILL_INFOS[e.currentTarget.getAttribute('skill_type')].name)
     }
 
     defenseSkills.push(skillBox)
@@ -182,9 +170,6 @@ const hoverTooltip = (skillBox, tooltip) => {
     tooltip.innerHTML += `<p>${skill_info.effect_desc}</p>`
   }
   tooltip.style.display = 'flex'
-  // if (type === 'defense') tooltip.style.bottom = '73px'
-  // else tooltip.style.top = '73px'
-
   skillBox.append(tooltip)
 }
 
