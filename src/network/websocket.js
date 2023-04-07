@@ -234,6 +234,7 @@ export function reportError(errMessage) {
 }
 
 function checkOrReconnect() {
+  console.log("checkOrReconnect")
   if (!ws) {
     // 연결이 끊겨 있으면 연결하기
     connect()

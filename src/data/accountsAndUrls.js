@@ -1,5 +1,4 @@
-// export const network = 'testnet'
-export const network = 'mainnet'
+export const network = location.hash.includes('testnet') ? 'testnet' : 'mainnet'
 
 var accounts_list = {
     testnet: {
