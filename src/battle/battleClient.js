@@ -18,6 +18,7 @@ import { ChannelHandler } from './channelHandler'
 import { ChainHandler } from './chainHandler'
 import { startGame } from '../user/user'
 import { accounts } from '../data/accountsAndUrls'
+import { sendPosition } from '../control/move'
 
 const resume_data = {
   battle_data: {},
@@ -184,6 +185,7 @@ class BattleClient {
   }
 
   start() {
+    sendPosition({x: -100, y: -100})
     this.timerId = setInterval(() => this.timer(), 1000)
     this.playing = true
     document.getElementById('battle_banner').style.display = 'block'
@@ -299,13 +301,13 @@ class BattleClient {
       case 'wait-finalize':
         document.getElementById('atk_or_def').innerText = 'Finalizing...'
         if (current_time > this.get_result_at) {
-          this.get_result_at += 1020
+          this.get_result_at = current_time + 9999 + 20
           wallet.viewMethod({
             contractId: accounts.BATTLE_CONTRACT,
             method: 'get_result',
             args: { battle_id: this.battle_id },
           }).then((res) => {
-            this.get_result_at -= 1000
+            this.get_result_at -= 9999
             switch (res) {
               case 'Player0Lose':
                 if (this.my_index === 0) {
@@ -324,6 +326,7 @@ class BattleClient {
                 break
             }
           }).catch((e) => {
+            this.get_result_at -= 9999
             console.log(e)
           })
         }
