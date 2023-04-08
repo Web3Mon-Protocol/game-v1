@@ -19,6 +19,7 @@ const nftCropOffsets = {
   'ff.nekotoken.near': { x: 0, y: -60, w: 180, h: 180 }, //ok
   'mmc-pups.nfts.fewandfar.near': { x: 10, y: -45, w: 180, h: 180 }, //ok
   'nftv1.web3mon.near': { x: 0, y: 0, w: 180, h: 180 },
+  'asac.web3mon.testnet': { x: -2, y: -21, w: 180, h: 180 }, //ok
 }
 
 onmessage = function (event) {
