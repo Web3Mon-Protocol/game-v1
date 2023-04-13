@@ -116,7 +116,7 @@
               Battle History
             </button>
           </div>
-          <div class="game_button_container" id="readyButtonContainer">
+          <div class="game_button_container" id="readyButtonContainer" style="display: none;">
             <button class="custom_button_1" id="readyButton" type="button" class="nes-btn">
               Get Ready
             </button>
@@ -150,13 +150,15 @@
       <div id="skill_box_temp" class="battle_modal">
         <p class="title">Selections</p>
         <div id="skill_box_wrapper">
+          <br/>
+          <h4>Attack - Choose 3 skills</h4> 
           <div class="attack_skill_box"></div>
+          <h4>Defense - Choose 3 skills</h4> 
           <div class="defense_skill_box"></div>
         </div>
         <button id="selectTypeBtn">Choosen All</button>
         <div>
-          You have to choose three attacks and three defenses each. <br />
-          The top line is the attack skill and the bottom line is the defense skill.
+          You have to choose three attacks and three defenses each.
         </div>
       </div>
 
@@ -171,6 +173,7 @@
       </div>
 
       <div id="multipleActionCard" class="battle_modal">
+        <h2>Battle is now On-Chain Mode</h2>
         <h2>Choose Skills For 5 Rounds</h2>
         <p>After 60 seconds will automatically commit to chain</p>
         <div id="action_box_container" class="action_box"></div>

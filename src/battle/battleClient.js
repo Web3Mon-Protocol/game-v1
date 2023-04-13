@@ -27,6 +27,7 @@ const resume_data = {
   token_id: '',
   clothId: '',
   opponentId: '',
+  save_time: Date.now(),
 }
 
 class BattleClient {
@@ -65,6 +66,13 @@ class BattleClient {
       },
     })
     this.opponent_id = receiver_player_id
+    
+    // wait for opponent to accept for 1 minute
+    setTimeout(() => {
+      if (this.playing) return
+      this.opponent_id = ''
+      closeCard()
+    }, 90000)
   }
 
   // accept offered battle from opponent
@@ -76,6 +84,13 @@ class BattleClient {
       },
     })
     this.opponent_id = proposer_player_id
+
+    // wait for the battle to start for 1 minute
+    setTimeout(() => {
+      if (this.playing) return
+      this.opponent_id = ''
+      closeCard()
+    }, 60000)
   }
 
   async refuse(battle_id) {
@@ -153,6 +168,8 @@ class BattleClient {
         },
         deposit: 1,
       })
+
+      // start battle
       if (myID in users && this.opponent_id in users) {
         if (users[myID].made && users[this.opponent_id].made) {
           startGame()
@@ -181,6 +198,7 @@ class BattleClient {
     resume_data.clothId = selectedClothId
     resume_data.token_id = tokenId
     resume_data.map = player.map
+    resume_data.save_time = Date.now()
     sessionStorage.setItem('resume-data', JSON.stringify(resume_data))
   }
 
@@ -207,6 +225,7 @@ class BattleClient {
           this.selectedSkills.attacks.sort()
           this.selectedSkills.defences.sort()
           this.chooseSkills(this.selectedSkills)
+          showCard('Waiting for Opponent', '<p>Waiting for Opponent</p>')
         })
     } else {
       initBattle(this.opponent_id, this.channelHandler.battle_state, this.my_index)
@@ -285,6 +304,7 @@ class BattleClient {
       case 'ok':
         break
       case 'enter-game':
+        closeCard()
         enterBattle(handler.battle_state, this.my_index, this.opponent_id)
         break
       case 'render-state':
@@ -324,6 +344,9 @@ class BattleClient {
                   this.close('WIN')
                 }
                 break
+              case 'RefundToAll':
+                this.close('DRAW')
+                break
             }
           }).catch((e) => {
             this.get_result_at -= 9999
@@ -337,6 +360,7 @@ class BattleClient {
   close(result) {
     clearInterval(this.timerId)
     sessionStorage.removeItem('resume-data')
+    document.getElementById('skill_box_temp').style.display = 'none'
     document.getElementById('battle_banner').style.display = 'none'
     this.playing = false
     endBattle(result, this.bet_amount)

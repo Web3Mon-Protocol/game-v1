@@ -28,8 +28,8 @@ function onmessage(type, data) {
       setMyID(data)
       turnToGameScreen()
       console.log('My ID: ' + myID)
+
     case NETWORK.JOIN:
-      console.log('실행합니다')
       // 유저가 들어왔다.
       break
 
@@ -126,7 +126,6 @@ function onmessage(type, data) {
 
     // use as a tmp broadcaster
     case CHAT.BOARD_CAST_CHAT:
-      console.log(data)
       if (data['content'][0] === '{') {
         var user_info = JSON.parse(data['content'])
         if (!(data.send_player_id in users))
@@ -146,30 +145,23 @@ function onmessage(type, data) {
       break
     
     case CHAT.WHISPER_CHAT:
-      console.log(data)
       battle.receiveChat(data)
 
     case 'ReadyBattle':
-      console.log(data)
       break
 
     case ACTION.MAP_TRANSFER:
-      console.log('유저의 맵이동', type, data)
       break
 
     case NETWORK.BATTLE_INIT:
-      console.log('배틀 열림!', data)
       battle.init(data.battle_id, data.next_turn_expired_at)
       break
 
     case NETWORK.BATTLE_OFFER:
-      console.log('누가 나한테 배틀 신청함!', data)
-      // 우선 수락할건지 말건지 화면을 보여줘야한다.
       setUpBattleCard('accept', data.proposer_player_id, data.battle_id)
       break
 
     case NETWORK.BATTLE_REJECT:
-      console.log('누가 내 배틀 거절함!', data.reason)
       if (!battle.playing) {
         if (data.reason === 0) window.alert('Opponent is already on Battle')
         else if (data.reason === 1) window.alert('Opponent Refused to Battle')
@@ -207,10 +199,8 @@ export function onopen() {
     var msg = wsQueue.shift()
     if (msg != null)
       try {
-        console.log(msg)
         ws.send(msg)
       } catch (e) {
-        console.log(e)
         wsQueue.push(msg)
       }
   }, 1000)
@@ -234,9 +224,7 @@ export function reportError(errMessage) {
 }
 
 function checkOrReconnect() {
-  console.log("checkOrReconnect")
   if (!ws) {
-    // 연결이 끊겨 있으면 연결하기
     connect()
     return false
   }
@@ -245,13 +233,13 @@ function checkOrReconnect() {
   if (ws.readyState === WebSocket.OPEN) {
     return true
   }
-  // connect()
+  // reconnect if closed or errored
+  connect()
   return false
 }
 
 // used to prevent websocket send failure
 export function safe_send(msg) {
-  console.log(msg)
   wsQueue.push(JSON.stringify(msg))
 }
 
@@ -271,12 +259,10 @@ export function connect() {
 
   ws = new WebSocket(serverUrl)
 
-  console.log('웹소켓', ws)
-
   ws.binaryType = 'arraybuffer'
 
   ws.onopen = (e) => {
-    // console.log('오픈 되었다', e)
+    console.log('Websocket server is Open', e)
     onopen()
   }
 

@@ -1,6 +1,4 @@
-import { player, setPlayer, users } from '../user/user'
 import { battle } from './battleClient'
-import { initBattle } from './battleScene'
 import { ATTACKS, DEFENCES, SKILL_INFOS } from '../data/skill'
 /**
  * Choose which skill to bring in battle
