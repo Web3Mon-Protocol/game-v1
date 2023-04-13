@@ -82,4 +82,11 @@ export function setUpBattleCard(type, key, battle_id) {
   document.getElementById('parasConnectBtn').addEventListener('click', () => {
     window.open(parasURL, '_blank').focus()
   })
+
+  // close card after 30 seconds
+  setTimeout(() => {
+    if (document.getElementById('battleCard').style.display === 'block') {
+      no()
+    }
+  }, 30000)
 }

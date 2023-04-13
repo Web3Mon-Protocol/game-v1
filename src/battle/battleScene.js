@@ -95,6 +95,9 @@ export function endBattle(result, bet_amount) {
       if (result === 'LOSE') {
         showCard('You LOSE!', `You Lose ${bet_amount}$`, closeCard)
       }
+      if (result === 'DRAW') {
+        showCard('DRAW!', `${bet_amount}$ is Refunded`, closeCard)
+      }
       document.querySelector('#joyDiv').style.display = 'block'
       gsap.to('#overlappingDiv', {
         opacity: 0,

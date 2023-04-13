@@ -1,5 +1,4 @@
-// export const network = 'testnet'
-export const network = 'mainnet'
+export const network = location.hash.includes('testnet') ? 'testnet' : 'mainnet'
 
 var accounts_list = {
     testnet: {
@@ -24,7 +23,6 @@ var websocketUrl_list = {
 
 var partner_nfts_list = {
     testnet: {
-        'nearnauts.web3mon.testnet': {base_uri: 'https://nearnaut.mypinata.cloud/ipfs', name: 'Nearnauts'},
         'asac.web3mon.testnet': {base_uri: 'https://ipfs.io/ipfs/bafybeicj5zfhe3ytmfleeiindnqlj7ydkpoyitxm7idxdw2kucchojf7v4/', name: 'ASAC'},
         'nftv1.web3mon.testnet': {base_uri: '', name: 'Web3Mon'},
     },

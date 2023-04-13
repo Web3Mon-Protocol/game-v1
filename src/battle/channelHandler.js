@@ -4,6 +4,7 @@ import { BattleState } from './battleState'
 import { wallet } from '../wallet/multi-wallet'
 import { getCurrentTime, hashMessage, randInt, signMessage, verifyMessage } from './utils'
 import { ethers } from 'ethers'
+import { enterBattle } from './enterBattle'
 
 export class ChannelHandler {
   battle_id
@@ -141,22 +142,26 @@ export class ChannelHandler {
 
     if (pick_time_left < 0) {
       if (!this.chose_action) {
+        this.actions[1 - this.my_index] = []
         return 'time-over'
       }
     }
 
     if (consensus_time_left < 0) {
+      // enter game at first
+      if (this.battle_state.sequence === 0) {
+        return 'wait-finalize'
+      }
+      // then switch to game mode
       return 'switch-to-chain'
     }
 
     var is_my_attack = this.battle_state.attacker_index === this.my_index
-    fillBanner(is_my_attack, this.battle_state.sequence, pick_time_left)
+    fillBanner(is_my_attack, this.battle_state.sequence, Math.max(pick_time_left, 0))
 
     if (!this.status.is_ok) return
     var msg = this.receive_queue.shift()
     if (msg === undefined) return
-    console.log(msg)
-    console.log(this.status.stage)
 
     if (msg === 'next') {
       if (this.status.stage === 'commit') {
@@ -236,7 +241,6 @@ export class ChannelHandler {
 
   // channel only
   receiveCommit(commit) {
-    console.log('receive commit')
     commit = JSON.parse(commit)
     var message = {
       hashed_message: commit.hashed_message,
@@ -248,7 +252,6 @@ export class ChannelHandler {
       commit.signature
     )
     if (!match) {
-      console.log('error receive commit')
       return
     }
     this.op_commit = commit.hashed_message
@@ -261,7 +264,6 @@ export class ChannelHandler {
   }
 
   sendRevealAction() {
-    console.log('send action')
     var action = this.actions[this.my_index]
     safe_send({
       BattleRevealAction: {
@@ -272,7 +274,6 @@ export class ChannelHandler {
   }
 
   sendRevealReady() {
-    console.log('send action')
     var action = this.actions[this.my_index]
     safe_send({
       BattleRevealReady: {
@@ -284,8 +285,6 @@ export class ChannelHandler {
 
   // channel only
   receiveReveal(action) {
-    console.log('receive reveal')
-    console.log(action)
     action = JSON.parse(action)
     var commit = hashMessage(JSON.stringify(action))
     if (commit === this.op_commit) {
@@ -305,7 +304,6 @@ export class ChannelHandler {
     if (this.battle_state.sequence === 0)
       this.battle_state.setPlayerSkills(this.actions)
     else if (!this.battle_state.do_next(this.actions)) {
-      console.log('problem computing state')
       return false
     }
     var battle_state = this.battle_state.write()
@@ -324,7 +322,6 @@ export class ChannelHandler {
     // battle is finished
     if (this.battle_state.winner !== undefined) {
       renderState(this.battle_state, this.actions, this.my_index)
-      console.log('battle finished')
       document.getElementById('atk_or_def').innerText = 'Finalizing...'
       this.status.stage = 'wait-over'
     }
@@ -333,7 +330,6 @@ export class ChannelHandler {
 
   // channel only
   receiveStateSignature(msg) {
-    console.log('receive state signature')
     msg = JSON.parse(msg)
     if (msg.type === 'ConsensusState') {
       return false

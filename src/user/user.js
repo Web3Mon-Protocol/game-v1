@@ -31,12 +31,14 @@ const canvas = document.getElementById('game_canvas')
 
 const canva = canvas.getContext('2d')
 
+let started = false
 export function startGame() {
   adjustMapPosition()
   endLoadingScreen()
   animate()
   // start music
   playMusic('villageAudio')
+  started = true
 }
 
 worker.onmessage = function (event) {
@@ -58,13 +60,24 @@ worker.onmessage = function (event) {
     resume_data = JSON.parse(resume_data)
     var opponent_id = resume_data.battle_data.opponent_id
     transferMapTo(resume_data.map, false)
-    if (event.data.id === myID || event.data.id === opponent_id)
+    if (event.data.id === myID || event.data.id === opponent_id) {
       if (myID in users && opponent_id in users) {
         if (users[myID].made && users[opponent_id].made) {
           startGame()
           battle.resume(resume_data.battle_data)
         }
       }
+    }
+
+    // remove resume data after 40 seconds
+    setTimeout(() => {
+      sessionStorage.removeItem('resume-data')
+      // if the game is still not started, start the game
+      if (!started) {
+        startGame()
+        window.alert('Opponent has left the game. Refund will be processed.')
+      }
+    }, 40000)
   } else {
     if (event.data.id === myID) {
       startGame()

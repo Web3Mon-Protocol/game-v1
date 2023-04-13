@@ -20,6 +20,18 @@ let keys = {
   d: {
     pressed: false,
   },
+  up: {
+    pressed: false,
+  },
+  left: {
+    pressed: false,
+  },
+  down: {
+    pressed: false,
+  },
+  right: {
+    pressed: false,
+  },
 }
 
 window.addEventListener('keydown', (e) => {
@@ -42,6 +54,26 @@ window.addEventListener('keydown', (e) => {
       keys.d.pressed = true
       lastKey = 'd'
       break
+
+    case 'ArrowUp':
+      keys.up.pressed = true
+      lastKey = 'up'
+      break
+    
+    case 'ArrowLeft':
+      keys.left.pressed = true
+      lastKey = 'left'
+      break
+
+    case 'ArrowDown':
+      keys.down.pressed = true
+      lastKey = 'down'
+      break
+
+    case 'ArrowRight':
+      keys.right.pressed = true
+      lastKey = 'right'
+      break
   }
 })
 
@@ -50,14 +82,33 @@ window.addEventListener('keyup', (e) => {
     case 'w':
       keys.w.pressed = false
       break
+
     case 'a':
       keys.a.pressed = false
       break
+
     case 's':
       keys.s.pressed = false
       break
+
     case 'd':
       keys.d.pressed = false
+      break
+
+    case 'ArrowUp':
+      keys.up.pressed = false
+      break
+
+    case 'ArrowLeft':
+      keys.left.pressed = false
+      break
+
+    case 'ArrowDown':
+      keys.down.pressed = false
+      break
+
+    case 'ArrowRight':
+      keys.right.pressed = false
       break
   }
 })
@@ -132,14 +183,18 @@ function checkDirection() {
   if (keys.a.pressed && lastKey === 'a') return 'left'
   if (keys.s.pressed && lastKey === 's') return 'down'
   if (keys.d.pressed && lastKey === 'd') return 'right'
-  return 'not moving'
+  if (keys.up.pressed && lastKey === 'up') return 'up'
+  if (keys.left.pressed && lastKey === 'left') return 'left'
+  if (keys.down.pressed && lastKey === 'down') return 'down'
+  if (keys.right.pressed && lastKey === 'right') return 'right'
+  return ''
 }
 
 const speed = 0.2
 export function movePlayer(num = 1, passedTime) {
 
   const direction = checkDirection()
-  if (direction === 'not moving') return
+  if (direction === '') return
   
   var moving = true
 
